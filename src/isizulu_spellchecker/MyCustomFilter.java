@@ -13,6 +13,7 @@ import java.io.File;
  */
 class MyCustomFilter extends javax.swing.filechooser.FileFilter {
 
+    /*
     @Override
     public String getDescription() {
         // This description will be displayed in the dialog,
@@ -23,6 +24,24 @@ class MyCustomFilter extends javax.swing.filechooser.FileFilter {
     @Override
     public boolean accept(File file) {
         // Allow only directories, or files with ".txt" extension
-        return file.isDirectory() || file.getAbsolutePath().endsWith(".txt");
+        return file.isDirectory() || file.getAbsolutePath().endsWith(".txt") || file.getAbsolutePath().endsWith(".docx");
+    }*/
+    private String extension;
+    private String description;
+
+    public MyCustomFilter(String extension, String description) {
+        this.extension = extension;
+        this.description = description;
+    }
+
+    public boolean accept(File file) {
+        if (file.isDirectory()) {
+            return true;
+        }
+        return file.getName().endsWith(extension);
+    }
+
+    public String getDescription() {
+        return description + String.format(" (*%s)", extension);
     }
 }

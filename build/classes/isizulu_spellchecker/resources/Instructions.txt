@@ -1,0 +1,34 @@
+NOTE:
+The tool shows instructions in blue at the top. Warning instructions are shown in red.
+  
+Functionalities explained:
+1. To open a file:
+	a. Click File -> Open File...
+	b. Select file then click open
+
+2. To save a file:
+	a. Click File -> Save As... or Cick the ''Save Correction'' button on the right
+	b. Type filename then its extension e.g. myfile.docx 
+	c. Click save button (note the directory you save your file in)
+
+3. To paste text:
+	a. Click Edit -> Paste or press CTRL+V or  right-click and click paste
+
+4. To cut text :
+	a. Highlight the text you want to cut (CTRL+A for all text)
+	b. Click Edit -> Cut or right-click and click cut
+
+5. To copy text : 
+	a. Highlight the text you want to cut (CTRL+A for all text)
+	b. Click Edit -> Cut or right-click and click cut
+
+Buttons explained:
+1. Run -: Checks for spelling errors, it shows only the first error it finds
+2. Show all -: Shows all the errors in the text
+3. Ignore Once -: It ignores a highlighted error for that run
+4. Ignore All -: It ignores all occurances of that error
+5. Add -: It adds a the highlighted word into a personal dictionary. 
+                    The word wont be recognized as an error in future
+6. Clear Text -: Deletes ALL the displayed text WITHOUT saving!
+7. Save Correction -: Saves the text into a file that you will specify as in point 2 of functionalities.
+8. Close -: Closes the Spell checker WITHOUT saving you work!

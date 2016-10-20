@@ -9,15 +9,18 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,7 +30,7 @@ public class Model {
 
     public HashMap<String, Integer> trigramMap = new HashMap<>();
     private final HashSet<String> wordlist = new HashSet<>();
-    public HashSet<String> dictionary = new HashSet<>(); //Stores words added by the user
+    public final HashSet<String> dictionary = new HashSet<>(); //Stores words added by the user
     private String dictDatabas = ""; //to make writing back to file easier
 
     public Model() {
@@ -66,7 +69,7 @@ public class Model {
         boolean error = false;
         int fre = 0;
         double probability, threshold = 0.003;
-        int totalWords = trigramMap.size(); //Needs to be fixed
+        int totalWords = trigramMap.size(); 
 
         //calculate the probability of each trigram and check for correctness
         for (String trigram : trigrams) {
@@ -107,22 +110,25 @@ public class Model {
     private void initialize() {
         try {
             InputStream wdlist = Isizulu_Spellchecker.class.getResourceAsStream("resources/wordlist.txt");
-            InputStream dict = Isizulu_Spellchecker.class.getResourceAsStream("resources/dictionary.txt");
             InputStream tri = Isizulu_Spellchecker.class.getResourceAsStream("resources/trigrams.txt");
 
             BufferedReader wdReader = new BufferedReader(new InputStreamReader(wdlist));
-            BufferedReader dictReader = new BufferedReader(new InputStreamReader(dict));
             BufferedReader trigramReader = new BufferedReader(new InputStreamReader(tri));
 
-            // Load user dictionary
-            String line = dictReader.readLine();
-            while (line != null) {
-                dictionary.add(line.trim());
-                dictDatabas += line.trim();
-                line = dictReader.readLine();
-            }
-            dict.close();
+            File dict = new File("user_dictionary");
 
+            // Load user dictionary if it exists
+            String line;
+            if (dict.exists()) {
+                BufferedReader dictReader = new BufferedReader(new FileReader(dict));
+                line = dictReader.readLine();
+                while (line != null) {
+                    dictionary.add(line.trim());
+                    dictDatabas += line.trim();
+                    line = dictReader.readLine();
+                }
+            }
+            
             //Load the wordlist
             line = wdReader.readLine();
             while (line != null) {
@@ -165,21 +171,33 @@ public class Model {
      */
     public void addWord(String word) {
         FileWriter fw = null;
+        Writer bw = null;
+
         try {
-            String wdlist = Isizulu_Spellchecker.class.getResource("resources/dictionary.txt").getFile();
-            File file = new File(wdlist);
-            //String content = new FileReader(file.getAbsoluteFile()).r;
-            fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fw);
-            //updates the content of the user dictionary
-            dictionary.add(word);
-            dictDatabas += "\n"+word;
-            bw.write(dictDatabas);
-            bw.close();
+            //updates the content of the user dictionary*/
+            File dict = new File("user_dictionary");
+            if (!dict.exists()) {
+                dict.createNewFile();
+                fw = new FileWriter(dict);
+                bw = new BufferedWriter(fw);
+                dictionary.add(word);
+                dictDatabas +=  word;
+                bw.write(dictDatabas);
+            } else {
+                fw = new FileWriter(dict);
+                bw = new BufferedWriter(fw);
+                //updates the content of the user dictionary*/
+                dictionary.add(word);
+                dictDatabas += "\n" + word;
+                bw.write(dictDatabas);
+            }
+
         } catch (IOException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "File not found");
         } finally {
             try {
+                bw.close();
                 fw.close();
             } catch (IOException ex) {
                 Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
