@@ -236,7 +236,7 @@ public class Spellchecker extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("G:\\Documents\\My Library\\Nokosoftonic\\NokDev\\IsiZulu_Spellchecker\\logo_logoman_ukzn_university-of-kwazulu-natal.png")); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/isizulu_spellchecker/resources/ukzn_logo.png"))); // NOI18N
 
         file.setText("File");
 
