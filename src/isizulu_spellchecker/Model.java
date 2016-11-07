@@ -42,7 +42,10 @@ public class Model {
      * returns true if correct
      */
     public boolean check(String str) {
-        if (search(str)) {
+        if(str.length() < 3){
+            return true;
+        }
+        else if (search(str)) {
             //finds word in wordlist or dictionary
             return true;
         } else {

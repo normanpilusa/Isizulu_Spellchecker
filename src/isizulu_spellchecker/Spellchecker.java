@@ -48,6 +48,7 @@ public class Spellchecker extends javax.swing.JFrame {
     Model m;
     String text;
     String currentWord = "";
+    boolean language = true;
 
     //Markers
     int sentNo = 0;//Which sentence
@@ -124,14 +125,15 @@ public class Spellchecker extends javax.swing.JFrame {
         checkAll = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
-        saveButton = new javax.swing.JButton();
+        saveCorrection = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         file = new javax.swing.JMenu();
         open = new javax.swing.JMenuItem();
-        save = new javax.swing.JMenuItem();
+        saveAs = new javax.swing.JMenuItem();
+        languageCheck = new javax.swing.JCheckBoxMenuItem();
         exit = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        editMenu = new javax.swing.JMenu();
         cut = new javax.swing.JMenuItem();
         copy = new javax.swing.JMenuItem();
         paste = new javax.swing.JMenuItem();
@@ -215,6 +217,7 @@ public class Spellchecker extends javax.swing.JFrame {
         instruction.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         instruction.setForeground(new java.awt.Color(0, 0, 255));
         instruction.setText("To begin: Type or paste text below or Click File->Open File... to load a file");
+        instruction.setDoubleBuffered(true);
 
         lmatters.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lmatters.setText("Languagematters@UKZN");
@@ -229,10 +232,10 @@ public class Spellchecker extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(128, 128, 128));
         jLabel5.setText("By: Norman Pilusa");
 
-        saveButton.setText("Save Correction");
-        saveButton.addActionListener(new java.awt.event.ActionListener() {
+        saveCorrection.setText("Save Correction");
+        saveCorrection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveButtonActionPerformed(evt);
+                saveCorrectionActionPerformed(evt);
             }
         });
 
@@ -248,13 +251,22 @@ public class Spellchecker extends javax.swing.JFrame {
         });
         file.add(open);
 
-        save.setText("Save As...");
-        save.addActionListener(new java.awt.event.ActionListener() {
+        saveAs.setText("Save As...");
+        saveAs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveActionPerformed(evt);
+                saveAsAsActionPerformed(evt);
             }
         });
-        file.add(save);
+        file.add(saveAs);
+
+        languageCheck.setSelected(true);
+        languageCheck.setText("Use English");
+        languageCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                languageCheckActionPerformed(evt);
+            }
+        });
+        file.add(languageCheck);
 
         exit.setText("Exit");
         exit.addActionListener(new java.awt.event.ActionListener() {
@@ -266,7 +278,7 @@ public class Spellchecker extends javax.swing.JFrame {
 
         jMenuBar1.add(file);
 
-        jMenu1.setText("Edit");
+        editMenu.setText("Edit");
 
         cut.setText("Cut");
         cut.addActionListener(new java.awt.event.ActionListener() {
@@ -274,15 +286,15 @@ public class Spellchecker extends javax.swing.JFrame {
                 cutActionPerformed(evt);
             }
         });
-        jMenu1.add(cut);
+        editMenu.add(cut);
 
         copy.setText("Copy");
-        jMenu1.add(copy);
+        editMenu.add(copy);
 
         paste.setText("Paste");
-        jMenu1.add(paste);
+        editMenu.add(paste);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(editMenu);
 
         helpMenu.setText("Help");
 
@@ -328,13 +340,13 @@ public class Spellchecker extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(3, 3, 3)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(close, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(saveButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(saveCorrection, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(clear, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(add, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(ignoreAll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -368,7 +380,7 @@ public class Spellchecker extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(clear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(saveCorrection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(53, 53, 53)
                         .addComponent(close, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(31, 31, 31)
@@ -389,15 +401,27 @@ public class Spellchecker extends javax.swing.JFrame {
         highlighter = textArea.getHighlighter();
         highlighter.removeAllHighlights();
         if (text.length() == 0) {
-            instruction.setText("Type or paste text below or Click File -> Open file... to load a file!");
+            if (language) {
+                instruction.setText("Type or paste text below or Click File -> Open file... to load a file!");
+            } else {
+                instruction.setText("Bhala noma namathelisela umbhalo olapha ngezansi noma > Cofa kuFayili > Vula ifayela…..ukuze ufake ifayela.");
+            }
             instruction.setForeground(Color.red);
             return;
         } else if (noErrors()) {
-            instruction.setText("No errors detected!");
+            if (language) {
+                instruction.setText("No errors detected!");
+            } else {
+                instruction.setText("Akukho maphutha atholakele");
+            }
             instruction.setForeground(Color.BLUE);
             return;
         } else {
-            instruction.setText("What do you want to do with this error?");
+            if (language) {
+                instruction.setText("What do you want to do with this error?");
+            } else {
+                instruction.setText("Ufuna ukwenzani ngaleli phutha?");
+            }
             instruction.setForeground(Color.BLUE);
             pos = 0;
             wordNo = 0;
@@ -482,15 +506,26 @@ public class Spellchecker extends javax.swing.JFrame {
             boolean active = true;
 
             if (text.length() == 0) {
-                instruction.setText("Type or paste text below or Click File -> Open file... to load a file!");
+                if (language) {
+                    instruction.setText("Type or paste text below or Click File -> Open file... to load a file!");
+                } else {
+                    instruction.setText("Bhala noma namathelisela umbhalo olapha ngezansi noma > Cofa kuFayili > Vula ifayela…..ukuze ufake ifayela.");
+                }
                 instruction.setForeground(Color.red);
                 return;
             } else if (!highlightSet) {
-                instruction.setText("Click Run first!");
+                if (language) {
+                    instruction.setText("Click Run first!");
+                } else {
+                    instruction.setText("Cofa uSebenzisa kuqala!");
+                }
                 instruction.setForeground(Color.red);
                 return;
             } else if (pos >= text.length()) {
-                instruction.setText("You reached the end of your text. Click run to check again");
+                if(language)
+                    instruction.setText("You reached the end of your text. Click run to check again");
+                else
+                    instruction.setText("Usufike esiphethweni sombhalo wakho. Cofa usebenzisa ukuze uhlole futhi");
                 instruction.setForeground(Color.BLUE);
                 return;
             } else {
@@ -551,7 +586,10 @@ public class Spellchecker extends javax.swing.JFrame {
             Logger.getLogger(Spellchecker.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (pos >= text.length() && sentNo >= sentences.length) {
-            instruction.setText("You reached the end of your text. Click run to check again");
+            if(language)
+                    instruction.setText("You reached the end of your text. Click run to check again");
+                else
+                    instruction.setText("Usufike esiphethweni sombhalo wakho. Cofa usebenzisa ukuze uhlole futhi");
             instruction.setForeground(Color.BLUE);
             currentWord = "";
             return;
@@ -573,15 +611,26 @@ public class Spellchecker extends javax.swing.JFrame {
             boolean active = true;
 
             if (text.length() == 0) {
-                instruction.setText("Type or paste text below or Click File -> Open file... to load a file!");
+                if (language) {
+                    instruction.setText("Type or paste text below or Click File -> Open file... to load a file!");
+                } else {
+                    instruction.setText("Bhala noma namathelisela umbhalo olapha ngezansi noma > Cofa kuFayili > Vula ifayela…..ukuze ufake ifayela.");
+                }
                 instruction.setForeground(Color.red);
                 return;
             } else if (!highlightSet) {
-                instruction.setText("Click Run first!");
+                if (language) {
+                    instruction.setText("Click Run first!");
+                } else {
+                    instruction.setText("Cofa uSebenzisa kuqala!");
+                }
                 instruction.setForeground(Color.red);
                 return;
             } else if (pos >= text.length()) {
-                instruction.setText("You reached the end of your text. Click run to check again");
+                if(language)
+                    instruction.setText("You reached the end of your text. Click run to check again");
+                else
+                    instruction.setText("Usufike esiphethweni sombhalo wakho. Cofa usebenzisa ukuze uhlole futhi");
                 instruction.setForeground(Color.BLUE);
                 if (highlightSet) {
                     if (!all.contains(currentWord)) {
@@ -647,7 +696,10 @@ public class Spellchecker extends javax.swing.JFrame {
             Logger.getLogger(Spellchecker.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (pos >= text.length() && sentNo >= sentences.length) {
-            instruction.setText("You reached the end of your text. Click run to check again");
+            if(language)
+                    instruction.setText("You reached the end of your text. Click run to check again");
+                else
+                    instruction.setText("Usufike esiphethweni sombhalo wakho. Cofa usebenzisa ukuze uhlole futhi");
             instruction.setForeground(Color.BLUE);
             currentWord = "";
             return;
@@ -669,15 +721,26 @@ public class Spellchecker extends javax.swing.JFrame {
             boolean active = true;
 
             if (text.length() == 0) {
-                instruction.setText("Type or paste text below or Click File -> Open file... to load a file!");
+                if (language) {
+                    instruction.setText("Type or paste text below or Click File -> Open file... to load a file!");
+                } else {
+                    instruction.setText("Bhala noma namathelisela umbhalo olapha ngezansi noma > Cofa kuFayili > Vula ifayela…..ukuze ufake ifayela.");
+                }
                 instruction.setForeground(Color.red);
                 return;
             } else if (!highlightSet) {
-                instruction.setText("Click Run first!");
+                if (language) {
+                    instruction.setText("Click Run first!");
+                } else {
+                    instruction.setText("Cofa uSebenzisa kuqala!");
+                }
                 instruction.setForeground(Color.red);
                 return;
             } else if (pos >= text.length()) {
-                instruction.setText("You reached the end of your text. Click run to check again");
+                if(language)
+                    instruction.setText("You reached the end of your text. Click run to check again");
+                else
+                    instruction.setText("Usufike esiphethweni sombhalo wakho. Cofa usebenzisa ukuze uhlole futhi");
                 instruction.setForeground(Color.BLUE);
                 if (highlightSet) {//one word text
 
@@ -742,7 +805,10 @@ public class Spellchecker extends javax.swing.JFrame {
             Logger.getLogger(Spellchecker.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (pos >= text.length() && sentNo >= sentences.length) {
-            instruction.setText("You reached the end of your text. Click run to check again");
+            if(language)
+                    instruction.setText("You reached the end of your text. Click run to check again");
+                else
+                    instruction.setText("Usufike esiphethweni sombhalo wakho. Cofa usebenzisa ukuze uhlole futhi");
             instruction.setForeground(Color.BLUE);
             currentWord = "";
             return;
@@ -759,10 +825,16 @@ public class Spellchecker extends javax.swing.JFrame {
         // TODO add your handling code here:
         //Resets globals used by other buttons such as ignoreAll
         if (textArea.getText().length() == 0) {
-            instruction.setText("Nothing to clear");
+            if(language)
+                instruction.setText("Nothing to clear");
+            else
+                instruction.setText("Akukho okucishwayo");
             instruction.setForeground(Color.red);
         } else {
-            instruction.setText("Text cleared! Start over.");
+            if(language)
+                instruction.setText("Text cleared! Start over.");
+            else
+                instruction.setText("Umbhalo usucishiwe! Qala kabusha.");
             instruction.setForeground(Color.BLUE);
             pos = 0;
             sentNo = 0;
@@ -777,19 +849,33 @@ public class Spellchecker extends javax.swing.JFrame {
         text = textArea.getText();
         highlighter = textArea.getHighlighter();
         if (text.length() == 0) {
-            instruction.setText("Type or paste text below or Click File -> Open file... to load a file!");
+            if (language) {
+                instruction.setText("Type or paste text below or Click File -> Open file... to load a file!");
+            } else {
+                instruction.setText("Bhala noma namathelisela umbhalo olapha ngezansi noma > Cofa kuFayili > Vula ifayela…..ukuze ufake ifayela.");
+            }
             instruction.setForeground(Color.red);
             return;
         } else if (!highlightSet) {
-            instruction.setText("Click Run first!");
+            if (language) {
+                instruction.setText("Click Run first!");
+            } else {
+                instruction.setText("Cofa uSebenzisa kuqala!");
+            }
             instruction.setForeground(Color.red);
             return;
         } else if (noErrors()) {
-            instruction.setText("No errors detected!");
+            if(language)
+                instruction.setText("No errors detected!");
+            else
+                instruction.setText("Akukho maphutha atholakele");
             instruction.setForeground(Color.BLUE);
             return;
         } else {
-            instruction.setText("Click Run to process errors one at a time");
+            if(language)
+                instruction.setText("Click Run to process errors one at a time");
+            else
+                instruction.setText("Cofa uSebenzisa ukuze ubheke iphutha ngalinye ngesikhathi");
             instruction.setForeground(Color.BLUE);
         }
         try {
@@ -834,7 +920,7 @@ public class Spellchecker extends javax.swing.JFrame {
         } catch (BadLocationException ex) {
             Logger.getLogger(Spellchecker.class.getName()).log(Level.SEVERE, null, ex);
         }
-        highlightSet = false;
+        highlightSet = true;
         //Resets globals used by other buttons such as ignoreAll
         pos = 0;
         sentNo = 0;
@@ -844,7 +930,10 @@ public class Spellchecker extends javax.swing.JFrame {
     private void openActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openActionPerformed
         // TODO add your handling code here:          
         int returnVal = fileChooser.showOpenDialog(this);
-        instruction.setText("Click run to check for errors");
+        if(language)
+            instruction.setText("Click run to check for errors");
+        else
+            instruction.setText("Cofa uSebenzisa ukuze uhlole amaphutha");
         instruction.setForeground(Color.BLUE);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
@@ -888,7 +977,11 @@ public class Spellchecker extends javax.swing.JFrame {
 
     private void about_ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_about_ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(null, "This IsiZulu spellchecker is based on the\nIsiZulu National Corpus from ULPDO at UKZN.\nDesigned by the department of Computer Science at UCT .", "About", JOptionPane.INFORMATION_MESSAGE);
+        if (language) {
+            JOptionPane.showMessageDialog(null, "This IsiZulu spellchecker is based on the\nIsiZulu National Corpus from ULPDO at UKZN.\nDesigned by the department of Computer Science at UCT .", "About", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Lensiza lokuhlola ukupelwa kwamagama isuselwe\\ kuKhophasi Kazwelonke yesiZulu ye-ULPDO e-UKZN\\ Yakhiwe umnyango wesayensi yamakhompyutha e-UCT.", "Mayelana", JOptionPane.INFORMATION_MESSAGE);
+        }
 
     }//GEN-LAST:event_about_ActionPerformed
 
@@ -896,7 +989,7 @@ public class Spellchecker extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_textAreaAncestorResized
 
-    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+    private void saveAsAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsAsActionPerformed
         // TODO add your handling code here:
         int returnVal = fileChooser.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -920,7 +1013,7 @@ public class Spellchecker extends javax.swing.JFrame {
                 System.out.println("problem accessing file" + file.getAbsolutePath());
             }
         }
-    }//GEN-LAST:event_saveActionPerformed
+    }//GEN-LAST:event_saveAsAsActionPerformed
 
     private void helpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpActionPerformed
         /*/ TODO add your handling code here:
@@ -941,17 +1034,21 @@ public class Spellchecker extends javax.swing.JFrame {
 
     }//GEN-LAST:event_helpActionPerformed
 
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+    private void saveCorrectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveCorrectionActionPerformed
         // TODO add your handling code here:
         text = textArea.getText();
         highlighter = textArea.getHighlighter();
         if (text.length() == 0) {
-            instruction.setText("You are trying to save an empty file!");
+            if (language) {
+                instruction.setText("You are trying to save an empty file!");
+            } else {
+                instruction.setText("Uzama ukulondoloza ifayela elingenalutho!");
+            }
             instruction.setForeground(Color.red);
         } else {
-            saveActionPerformed(evt);
+            saveCorrectionActionPerformed(evt);
         }
-    }//GEN-LAST:event_saveButtonActionPerformed
+    }//GEN-LAST:event_saveCorrectionActionPerformed
 
     private void cutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cutActionPerformed
         // TODO add your handling code here:
@@ -959,13 +1056,100 @@ public class Spellchecker extends javax.swing.JFrame {
 
     private void textAreaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textAreaKeyTyped
         // TODO add your handling code here:
-        if (highlightSet) {
-            instruction.setText("Click run to check the correctness of your changes or to continue to next error");
+        int len = textArea.getText().length();
+        if (highlightSet && len != 0) {
+            if (language) {
+                instruction.setText("Click run to check the correctness of your changes or to continue to next error");
+            } else {
+                instruction.setText("Cofa usebenzisa ukuze uhlole ubunjalo kwezinguquko ozenzile noma udlulele ephutheni elilandelayo ");
+            }
             instruction.setForeground(Color.blue);
             highlighter.removeAllHighlights();
             highlightSet = false;
+        } else if (len == 0) {
+            if (language) {
+                instruction.setText("Type or paste text below or Click File -> Open file... to load a file!");
+            } else {
+                instruction.setText("Bhala noma namathelisela umbhalo olapha ngezansi noma > Cofa kuFayili > Vula ifayela…..ukuze ufake ifayela.");
+            }
+            instruction.setForeground(Color.blue);
+            if (highlightSet) {
+                highlightSet = false;
+            }
+        } else {
+            if (language) {
+                instruction.setText("Click run to check for errors");
+            } else {
+                instruction.setText("Cofa uSebenzisa ukuze uhlole amaphutha");
+            }
+            instruction.setForeground(Color.blue);
         }
     }//GEN-LAST:event_textAreaKeyTyped
+
+    private void languageCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_languageCheckActionPerformed
+        // TODO add your handling code here:
+        text = textArea.getText();
+        highlighter = textArea.getHighlighter();
+        highlighter.removeAllHighlights();
+
+        language = !language;
+        if (language) {
+            languageCheck.setText("Use English");
+            about_.setText("About");
+            add.setText("Add");
+            checkAll.setText("Show All");
+            saveCorrection.setText("Save Correction");
+            saveAs.setText("Save As...");
+            run.setText("Run");
+            paste.setText("Paste");
+            cut.setText("Cut");
+            copy.setText("Copy");
+            open.setText("Open");
+            ignoreAll.setText("Ignore All");
+            ignoreOnce.setText("Ignore Once");
+            help.setText("Help");
+            helpMenu.setText("Help");
+            file.setText("File");
+            exit.setText("Exit");
+            close.setText("Close");
+            clear.setText("Clear Text");
+            editMenu.setText("Edit");
+            if (textArea.getText().length() == 0) {
+                instruction.setText("To begin: Type or paste text below or Click File->Open File... to load a file");
+            } else {
+                instruction.setText("Click run to check for errors");
+            }
+        } else {
+            this.setBounds(0, 0, 1100, 748);
+            languageCheck.setText("ulimi le singisi");
+            about_.setText("Mayelana");
+            add.setText("Engeza");
+            checkAll.setText("Khombisa Konke");
+            saveCorrection.setText("Londoloza Okulungisiwe");
+            saveAs.setText("Londoloza ngo…");
+            run.setText("Sebenzisa");
+            paste.setText("Namathisela");
+            cut.setText("Sika");
+            copy.setText("Qopha");
+            open.setText("Vula ifayela");
+            ignoreAll.setText("Ziba Konke");
+            ignoreOnce.setText("Ziba Kanye");
+            help.setText("Usizo");
+            helpMenu.setText("Usizo");
+            file.setText("iFayela");
+            exit.setText("Phuma");
+            close.setText("Vala");
+            clear.setText("Cisha Umbhalo");
+            editMenu.setText("Lungisa");
+            if (text.length() == 0) {
+                instruction.setText("Ukuze uqale: Bhala noma namathelisela umbhalo olapha ngezansi noma > Cofa kuFayili > Vula ifayela…..ukuze ufake ifayela.");
+            } else {
+                instruction.setText("Cofa uSebenzisa ukuze uhlole amaphutha");
+            }
+            
+        }
+
+    }//GEN-LAST:event_languageCheckActionPerformed
 
     /*
      * Checks for all errors
@@ -1060,6 +1244,7 @@ public class Spellchecker extends javax.swing.JFrame {
     private javax.swing.JButton close;
     private javax.swing.JMenuItem copy;
     private javax.swing.JMenuItem cut;
+    private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exit;
     private javax.swing.JMenu file;
     private javax.swing.JFileChooser fileChooser;
@@ -1070,17 +1255,17 @@ public class Spellchecker extends javax.swing.JFrame {
     private javax.swing.JLabel instruction;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JCheckBoxMenuItem languageCheck;
     private javax.swing.JLabel lmatters;
     private javax.swing.JMenuItem open;
     private javax.swing.JMenuItem paste;
     private javax.swing.JPopupMenu popup;
     private javax.swing.JButton run;
-    private javax.swing.JMenuItem save;
-    private javax.swing.JButton saveButton;
+    private javax.swing.JMenuItem saveAs;
+    private javax.swing.JButton saveCorrection;
     private javax.swing.JTextArea textArea;
     // End of variables declaration//GEN-END:variables
     private javax.swing.JFrame helpWindow;
